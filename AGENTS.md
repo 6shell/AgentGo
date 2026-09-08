@@ -1,4 +1,4 @@
-<!-- AGENTS.md v1.15.0 | AgentGo | https://github.com/yeasy/agentgo -->
+<!-- AGENTS.md v1.15.1 | AgentGo | https://github.com/yeasy/agentgo -->
 <!-- Compatible with AGENTS.md-aware agents; use aliases/imports for tools that require CLAUDE.md or GEMINI.md. -->
 
 # AGENTS.md
@@ -41,11 +41,11 @@ Use executable guards—tests, hooks, sandboxes, permission boundaries—for rul
 When startup, maintenance, or continuity cannot be guaranteed, degrade explicitly:
 
 - **READ_ONLY**: If `.agents/` cannot be written, continue read-only. Report the exact failed write, include the intended note/patch in the response, and do not claim memory changed.
-- **CORRUPT_MEMORY**: Preserve unreadable, malformed, or contradictory `.agents/` data; trust current artifacts and ask before deleting or rewriting it.
+- **CORRUPT_MEMORY**: Preserve unreadable or malformed `.agents/` data and internal contradictions that current artifacts cannot resolve; ask before deleting or rewriting that content. Correct verifiably stale facts against current artifacts without additional confirmation.
 - **MISCLASSIFIED_PROJECT**: If project type, entry points, or validation commands are uncertain or challenged, state the classification and evidence, narrow scope, and update `memory/project-overview.md` after correction is confirmed.
 - **BROKEN_ENV**: Never fake or silently skip unavailable tools, dependencies, or validation. Report the command/error and smallest fix; ask before extended repair. If unvalidated delivery is accepted, label it. Record the working setup in `workflows/` after recovery.
 - **CONCURRENT_WRITES**: `.agents/` is single-writer by default. Re-read before possibly overlapping writes. On conflict preserve both, write a separate timestamped note, and ask before merge/deletion. In multi-agent runs isolate sessions under `tmp/sessions/<session-id>/`; reconcile later instead of concurrently editing shared `memory/`, `rules/`, `workflows/`, or `skills/`.
-- **UNATTENDED**: With no user available (CI, schedules, batch, review bots, cloud agents), treat every confirmation-gated action as declined. Skip it, complete safe work, and list skipped actions/questions in output and persistent `memory/open-items.md` when possible; never self-approve. If `.agents/` cannot persist or would enter the reviewed change, keep it read-only and put durable findings in output/PR description.
+- **UNATTENDED**: With no user available (CI, schedules, batch, review bots, cloud agents), treat every confirmation-gated action without existing explicit user authorization as declined. Existing authorization remains valid only within its original scope. Skip declined actions, complete safe work, and list skipped actions/questions in output and persistent `memory/open-items.md` when possible; never self-approve. If `.agents/` cannot persist or would enter the reviewed change, keep it read-only and put durable findings in output/PR description.
 - **CONTEXT_LOSS**: Before likely compaction or session overrun, checkpoint goal, completed/remaining steps, decisions, and exact next action in `memory/open-items.md` plus changelog. On resume trust that entry over summarized recollection; close it at completion.
 
 ## Core Conventions
@@ -198,7 +198,7 @@ Use compact applicable fields (`date`, `artifact`, `note`, `evidence`, `status`,
 
 ### Maintenance Cadence
 
-Keep `.agents/` small, accurate, structured, and free of stale scratch. At session start, spot-check recently changed paths/assets/sections/symbols against current artifacts; a health check is due if the recent changelog shows no `[MAINTENANCE]`.
+Keep `.agents/` small, accurate, structured, and free of stale scratch. At session start, spot-check recently changed paths/assets/sections/symbols against current artifacts; locate the latest `[MAINTENANCE]` entry before assessing the triggers below. If none exists, a first health check is due; absence from the recent tail alone is not a trigger.
 
 Trigger health check/cleanup when a `memory/` file or the aggregate memory grows bloated, the changelog has grown substantially since the last maintenance, spot-checks find staleness, layout drifts, or `tmp/` contains stale scratch.
 

@@ -38,7 +38,7 @@
 - Claude Code / Codex / Cursor / Copilot / Windsurf / Gemini 各有一套配置格式，规则反复抄
 - 写完一遍项目约定，知识又跟着聊天记录走，记忆越长越多噪音
 
-**AgentGo 给你的：** 一份稳定的 [AGENTS.md 协议](https://raw.githubusercontent.com/yeasy/agentgo/v1.15.0/AGENTS.zh-CN.md) 加一个自适应 `.agents/` 项目层。把 `AGENTS.md` 放进任何项目根目录；当项目工作需要适配或持久记忆时，Agent 自动创建 `.agents/`，每次有意义工作后记录持久项目知识，且无需为该项目修改 `AGENTS.md` 本体。项目记忆保持轻量：来源索引、可选关系图、工作流、决策、changelog 和 outcomes 都放在 `.agents/` 下；不要求完整知识图谱或自动埋点。
+**AgentGo 给你的：** 一份稳定的 [AGENTS.md 协议](https://raw.githubusercontent.com/yeasy/agentgo/v1.15.1/AGENTS.zh-CN.md) 加一个自适应 `.agents/` 项目层。把 `AGENTS.md` 放进任何项目根目录；当项目工作需要适配或持久记忆时，Agent 自动创建 `.agents/`，每次有意义工作后记录持久项目知识，且无需为该项目修改 `AGENTS.md` 本体。项目记忆保持轻量：来源索引、可选关系图、工作流、决策、changelog 和 outcomes 都放在 `.agents/` 下；不要求完整知识图谱或自动埋点。
 
 |           | 没有 AgentGo                     | 有 AgentGo                      |
 |:----------|:--------------------------------|:--------------------------------|
@@ -56,17 +56,17 @@
 
 两种方式，按你当前所在位置任选其一。
 
-**在终端里** —— 把当前稳定版 [AGENTS.zh-CN.md](https://github.com/yeasy/agentgo/blob/v1.15.0/AGENTS.zh-CN.md) 下载到项目根目录并保存为 `AGENTS.md`（AGENTS 规范要求文件名固定）：
+**在终端里** —— 把当前稳定版 [AGENTS.zh-CN.md](https://github.com/yeasy/agentgo/blob/v1.15.1/AGENTS.zh-CN.md) 下载到项目根目录并保存为 `AGENTS.md`（AGENTS 规范要求文件名固定）：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/yeasy/agentgo/v1.15.0/AGENTS.zh-CN.md -o AGENTS.md
+curl -fsSL https://raw.githubusercontent.com/yeasy/agentgo/v1.15.1/AGENTS.zh-CN.md -o AGENTS.md
 ```
 
-然后重新打开支持 AGENTS.md 的 Agent；对使用其他文件名的工具，按下方兼容性说明加一个很小的别名或 import。以上命令使用当前稳定版。若要预览未发布变更，把 `v1.15.0` 换成 `main`；`main` 是未发布的 edge 通道，内容可能与已发布版本不同。
+然后重新打开支持 AGENTS.md 的 Agent；对使用其他文件名的工具，按下方兼容性说明加一个很小的别名或 import。以上命令使用当前稳定版。若要预览未发布变更，把 `v1.15.1` 换成 `main`；`main` 是未发布的 edge 通道，内容可能与已发布版本不同。
 
 **在 Agent 里（Codex / Claude Code）** —— 把这一行贴进对话框，让 Agent 一次性完成拉取、阅读、bootstrap：
 
-> **"下载 [https://raw.githubusercontent.com/yeasy/agentgo/v1.15.0/AGENTS.zh-CN.md](https://raw.githubusercontent.com/yeasy/agentgo/v1.15.0/AGENTS.zh-CN.md) 到 ./AGENTS.md，阅读它，并按其中说明初始化本项目。"**
+> **"下载 [https://raw.githubusercontent.com/yeasy/agentgo/v1.15.1/AGENTS.zh-CN.md](https://raw.githubusercontent.com/yeasy/agentgo/v1.15.1/AGENTS.zh-CN.md) 到 ./AGENTS.md，阅读它，并按其中说明初始化本项目。"**
 
 Agent 会向你申请“拉取文件 / 写入项目”的权限——**请允许**，否则它只能给建议而无法落地。当项目工作需要适配或持久记忆时，Agent 会自动 bootstrap `.agents/`。
 
@@ -97,7 +97,7 @@ AgentGo 要求 Agent 在正常路径失败时显式降级：
 | 场景 | 预期行为 |
 |:--|:--|
 | `.agents/` 无法写入 | 继续只读工作，报告失败的写入动作，并在回复中给出原本要写入的笔记或 patch。 |
-| `.agents/` 看起来损坏或自相矛盾 | 以当前项目文件为真相源，把损坏笔记当作数据保留，重写前先询问。 |
+| `.agents/` 损坏或存在无法消解的内部矛盾 | 保留受影响的数据，重写前先询问；可核实的过期事实按当前项目文件直接纠正。 |
 | 项目类型或命令误判 | 说明分类证据，缩小当前任务范围，并在修正确认后更新 `project-overview.md`。 |
 | 多个 Agent 同时编辑 `.agents/` | 写入前重新读取；如果内容已变化，保留两边版本，并在合并或删除任一侧前询问。 |
 
@@ -274,7 +274,7 @@ your-project/
 
 **大部分不需要——非代码项目则完全不需要。** 那类 skill 包的篇幅大头，`AGENTS.md` 本来就原生具备：会话启动、项目记忆、信任边界与 prompt 注入防御、确认门控、委派 brief、审阅契约、能力生命周期和维护节奏。而且是一个文件、全 AGENTS.md 工具通用，不用为每个 harness 维护一套 manifest。
 
-按条款逐一对照 [superpowers](https://github.com/obra/superpowers) 5.1.0（14 个 skill），装上 `AGENTS.md` v1.15.0 之后：
+按条款逐一对照 [superpowers](https://github.com/obra/superpowers) 5.1.0（14 个 skill），装上 `AGENTS.md` v1.15.1 之后：
 
 | | 数量 | 原因 |
 |:--|:--|:--|
@@ -317,19 +317,19 @@ your-project/
 把未手改的本地模板更新到当前稳定版：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/yeasy/agentgo/v1.15.0/AGENTS.zh-CN.md -o AGENTS.md
+curl -fsSL https://raw.githubusercontent.com/yeasy/agentgo/v1.15.1/AGENTS.zh-CN.md -o AGENTS.md
 ```
 
 如果可能手改过，先下载到临时文件再比较：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/yeasy/agentgo/v1.15.0/AGENTS.zh-CN.md -o /tmp/AGENTS.latest.md
+curl -fsSL https://raw.githubusercontent.com/yeasy/agentgo/v1.15.1/AGENTS.zh-CN.md -o /tmp/AGENTS.latest.md
 diff -u AGENTS.md /tmp/AGENTS.latest.md
 ```
 
-若要预览未发布变更，把 `v1.15.0` 换成 `main`；从该 edge 通道安装前应先审查 diff。
+若要预览未发布变更，把 `v1.15.1` 换成 `main`；从该 edge 通道安装前应先审查 diff。
 
-不要让 Agent 按定时任务静默替换 `AGENTS.md`。`.agents/` 维护时可以检查是否有新版 AgentGo 模板并提出更新建议，但替换仍需要你的明确要求或确认。`AGENTS.md` 首行注释携带模板版本，例如 `AGENTS.md v1.15.0`；稳定安装目标应使用 release tag。
+不要让 Agent 按定时任务静默替换 `AGENTS.md`。`.agents/` 维护时可以检查是否有新版 AgentGo 模板并提出更新建议，但替换仍需要你的明确要求或确认。`AGENTS.md` 首行注释携带模板版本，例如 `AGENTS.md v1.15.1`；稳定安装目标应使用 release tag。
 
 更新后重启或要求 Agent 重扫：
 

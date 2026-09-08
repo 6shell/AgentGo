@@ -21,10 +21,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MAX_BYTES = 28_672
-RELEASE_LOCK_VERSION = "1.15.0"
+RELEASE_LOCK_VERSION = "1.15.1"
 PROTOCOL_CONTENT_DIGESTS = {
-    "AGENTS.md": "fc45f7db9c5058f548a03058bf9143e8baf798b6207e7ccde94012b5c862b45e",
-    "AGENTS.zh-CN.md": "e0d4c8b63dcd7d7d9554ba8b616597490ad1a8d04a68e0f314986f2c1f77d362",
+    "AGENTS.md": "b429cab61fe25dc30eec992f993d6c71f30a88e48f7034f7b22b789c4410e1ff",
+    "AGENTS.zh-CN.md": "d48417b492263ac95545260d171717810c7e3d3696ce387bdcefc6a93e9861df",
 }
 NUMERIC_IDENTIFIER = r"(?:0|[1-9][0-9]*)"
 NON_NUMERIC_IDENTIFIER = r"(?:[0-9]*[A-Za-z-][0-9A-Za-z-]*)"
@@ -108,7 +108,10 @@ SEMANTIC_MARKERS = {
         "unattended default decline": (
             2,
             "Failure Modes",
-            ("treat every confirmation-gated action as declined",),
+            (
+                "without existing explicit user authorization as declined",
+                "Existing authorization remains valid only within its original scope",
+            ),
         ),
         "required adaptation directories": (
             3,
@@ -239,7 +242,10 @@ SEMANTIC_MARKERS = {
         "无人值守默认拒绝": (
             2,
             "失败模式",
-            ("把所有需确认的动作一律视为被拒绝",),
+            (
+                "把尚无用户明确授权的需确认动作视为被拒绝",
+                "已有授权仅在原范围内有效",
+            ),
         ),
         "适配层必需目录": (
             3,
@@ -346,7 +352,7 @@ AUTHORITATIVE_LINE_DIGESTS = {
         "authority": "13a54883bcba942b4898fa2d7a44acf75a3fae34ff2bc13fe93772757c16166c",
         "high_risk": "5e29a4a4c71ff1f5ea58e596d03b4af87128d476fd7dc47577441afed87ecf6e",
         "misclassified": "dd98199f4a2057875bb46e0027d548e9b8587254cef51fd1ddba751c2b43c1a6",
-        "unattended": "3c193024bb9186c0c24db13479f5abf851f46465b08bb8f2ef89027717074191",
+        "unattended": "f701c22d55e0cc42b29b8628e021221e0f3d4863573fd2ded672e17313dba617",
         "secret": "8b3865402a87534747fd3db84aac145a1d2392b989258adbb34ee4cbdedb1a43",
         "deletion_row": "f8b823fe1cbe69f2342b6e170fd20751476572ca09a8fbf331ed63cd0570de8b",
         "promotion_row": "ee401f7dcd7c34620a414595f53e44a81aae137f3b4f71f9303f663688a532dc",
@@ -360,7 +366,7 @@ AUTHORITATIVE_LINE_DIGESTS = {
         "authority": "711be38d5998cb4b3b7d4a8eab4c30c645c5d76f204ab5091a8c31da9cb7730c",
         "high_risk": "f62a6ee94d1f973ec587fec064e70e6b1089ca95da639715120f679268c9e35d",
         "misclassified": "3d56c9568f0fd3d028f083cedac65c1c259ad9811f7ee0b2dedd5ccbffc0e418",
-        "unattended": "12ac32897b07a45e493caf6ca314f4946035a1f977efd8473d19ca1b35d8575d",
+        "unattended": "427e655b0dde994fffa805e04f0c1ee22dea413f961a388069c8af5f9d03f698",
         "secret": "85271e40756bc7e278a25352eb5bd8d2b4d7792e8c2143f8c4f75f9849bde603",
         "deletion_row": "84135f311d4110b6ee133393d47e972b7fecc88a6300446434f5231921d1f5d6",
         "promotion_row": "f59eda32e0430bfffab1f2692675648d9c65cac25d58df3a6af0a5d4a26a7d65",

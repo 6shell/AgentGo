@@ -549,6 +549,25 @@ class DocsContractTests(unittest.TestCase):
                     expected_error=expected_error,
                 )
 
+    def test_unattended_authorization_boundaries_in_both_languages(self):
+        cases = (
+            ("AGENTS.md", "without existing explicit user authorization",
+             "even with existing explicit user authorization",
+             "unattended default decline"),
+            ("AGENTS.md", "within its original scope",
+             "with unrestricted scope", "unattended default decline"),
+            ("AGENTS.zh-CN.md", "尚无用户明确授权的需确认动作",
+             "已有用户明确授权的需确认动作", "无人值守默认拒绝"),
+            ("AGENTS.zh-CN.md", "仅在原范围内有效",
+             "可扩展至任意范围", "无人值守默认拒绝"),
+        )
+        for filename, old, new, contract in cases:
+            with self.subTest(filename=filename, boundary=old):
+                self.assert_single_mutation_rejected(
+                    filename=filename, old=old, new=new,
+                    expected_error=f"{filename} is missing contract: {contract}",
+                )
+
     def test_validator_rejects_negated_authoritative_safety_lines(self):
         cases = (
             (
